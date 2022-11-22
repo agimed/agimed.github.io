@@ -1,0 +1,52 @@
+:root {
+  --primary: rgb(8, 220, 108);
+}
+
+.btn-custom-primary {
+  background-color: var(--primary);
+  color: white;
+}
+
+.btn-custom-primary:hover {
+  background-color: white;
+  color: var(--primary);
+  border: 1px var(--primary) solid;
+}
+
+.btn-custom-secondary {
+  background-color: white;
+  color: var(--primary);
+  border: 1px var(--primary) solid;
+}
+
+.btn-custom-secondary:hover {
+  background-color: var(--primary);
+  color: white;
+}
+
+
+.title-custom-primary {
+  color: var(--primary);
+  font-size: xx-large;
+}
+
+
+.color-custom-primary {
+  color: var(--primary);
+}
+
+.input-custom-primary {
+  outline: var(--primary);
+  border: 1px var(--primary) solid;
+}
+
+.link-custom-primary {
+  text-decoration: none;
+  color: var(--primary);
+}
+
+.link-custom-primary:hover {
+  text-decoration: underline;
+  color: var(--primary);
+  font-weight: bold;
+}

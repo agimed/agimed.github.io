@@ -1,9 +1,13 @@
 import React from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   Route,
   Routes,
   useNavigate
 } from "react-router-dom";
+
+
+import Login from './Pages/Login';
 
 
 function P1() {
@@ -18,6 +22,7 @@ function P1() {
 function App() {
   return (
     <Routes>
+      <Route path='/' element={<Login />} />
       <Route path='/' element={<P1 />} />
       <Route path='/about' element={<div>Cole mano 2</div>}/>
     </Routes>
