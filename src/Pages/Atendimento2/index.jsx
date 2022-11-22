@@ -5,7 +5,18 @@ import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 import arrowLeftImg from '../../assets/arrow-left.svg'
 
 import '../global.css'
-import { useState } from "react";
+
+const doencas = [
+  'No estomago',
+  'No figado',
+  'Cardiaca',
+  'Tuberculose',
+  'Asma',
+  'Intestinal',
+  'Renal',
+  'Diabetes',
+  'Hipertensão'
+]
 
 export default function () {
   const navigate = useNavigate()
@@ -35,27 +46,42 @@ export default function () {
           <div className='color-custom-primary'>
             <h1>Histórico</h1>
 
-            <p className="mb-0">Possui alergia a alguma substância ou medicamento?<br/>(Caso não possua deixe em branco)</p>
-            <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}}/>
+            <div className='bg-custom-primary p-3 box-sintomas'>
+              <p>Você tem/já teve doenças:</p>
+          
+              <Row>
+                {doencas.map( doenca => (
+                  <Col sm={6} lg={4} xl={3} style={{maxWidth: '50%'}} key={doenca}>
+                    <Form.Check
+                      className='mt-2'
+                      type='checkbox'
+                      id={`lcs-${doenca}`}
+                      label={`${doenca}`}
+                    />
+                  </Col>
 
+                ))}
+              </Row>
+          </div>
 
-
-            <p className="mb-0 mt-3">Faz uso de algum medicamento? Se sim diga-nos também a dosage.<br/>(Caso não possua deixe em branco)</p>
-            <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}}/>
-
+          <div className='mt-4'>
             <Form.Check
               className='mt-2'
               type='checkbox'
               id='check_gravida'
-              label="Está gravida ou suspeita de gravidez?"
+              label="Está realizando algum tratamento?"
             />
+
+            <p className="mb-0">Nos diga qual/quais?</p>
+            <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}}/>
           </div>
+        </div>
         </Row>
 
 
         <Row className='text-center mt-5'>
           <Col>
-            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => navigate('/atendimento/2')}>
+            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => navigate('/atendimento/3')}>
               Próximo
             </Button>
           </Col>
