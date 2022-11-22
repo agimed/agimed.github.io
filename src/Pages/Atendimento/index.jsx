@@ -1,8 +1,9 @@
-import { Button, Col, Container, Row, Form } from "react-bootstrap";
+import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 
 import '../global.css'
+import { useState } from "react";
 
 const sintomas = [
   'Febre',
@@ -26,7 +27,41 @@ const sintomas = [
   'Muita Sede'
 ]
 
+
+function ModalText({ showModal, setShowModal }) {
+  function fecharModal() {
+    setShowModal(false)
+  }
+
+  return (
+    <Modal
+      show={showModal}
+      onHide={fecharModal}
+      size="xl"
+      aria-labelledby="contained-modal-title-vcenter"
+      centered
+      backdrop="static"
+    >
+      <Modal.Header closeButton>
+        <Modal.Title id="contained-modal-title-vcenter" className="color-custom-primary">
+          Descreva abaixo resumidamente seus sintomas
+        </Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <textarea className="w-100 input-custom-primary" style={{minHeight: '300px'}}/>
+      </Modal.Body>
+      <Modal.Footer className='text-center'>
+        <div className="w-100">
+          <Button className="w-25 me-2" variant='custom-secondary' onClick={fecharModal}>Cancelar</Button>
+          <Button className="w-25 ms-2" variant='custom-primary' onClick={fecharModal}>Salvar</Button>
+        </div>
+      </Modal.Footer>
+    </Modal>
+  )
+}
+
 export default function () {
+  const [showModal, setShowModal] = useState(true)
   return (
     <>
       <Container className='mt-5' fluid={true}>
@@ -45,10 +80,9 @@ export default function () {
           
               <Row>
                 {sintomas.map( sintoma => (
-                  <Col sm={6} lg={4} xl={3} style={{maxWidth: '50%'}}>
+                  <Col sm={6} lg={4} xl={3} style={{maxWidth: '50%'}} key={sintoma}>
                     <Form.Check
                       className='mt-2'
-                      key={sintoma}
                       type='checkbox'
                       id={`lcs-${sintoma}`}
                       label={`${sintoma}`}
@@ -62,7 +96,7 @@ export default function () {
 
         <Row className='text-center mt-5'>
           <Col>
-            <Button variant='custom-primary' className='ps-5 pe-5 p-2'>
+            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => setShowModal(true)}>
               Próximo
             </Button>
           </Col>
@@ -84,6 +118,7 @@ export default function () {
           <p>Perfil</p>
         </Button>
       </div>
+      <ModalText showModal={showModal} setShowModal={setShowModal} />
     </>
   )
 }
