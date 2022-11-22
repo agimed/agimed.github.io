@@ -54,7 +54,7 @@ function ModalText({ showModal, setShowModal }) {
       <Modal.Footer className='text-center'>
         <div className="w-100">
           <Button className="w-25 me-2" variant='custom-secondary' onClick={fecharModal}>Cancelar</Button>
-          <Button className="w-25 ms-2" variant='custom-primary' onClick={() => {fecharModal(); navigate('/historico/1')}}>Salvar</Button>
+          <Button className="w-25 ms-2" variant='custom-primary' onClick={() => {fecharModal(); navigate('/atendimento/1')}}>Salvar</Button>
         </div>
       </Modal.Footer>
     </Modal>
