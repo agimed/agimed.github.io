@@ -89,7 +89,7 @@ export default function () {
       </Container>
 
       <div className="mt-5" />
-      <div className='bg-custom-primary footer text-center'>
+      <div className='bg-custom-primary text-center fixed-bottom footer'>
         <Button variant='custom-primary'>
           <BiMessageRoundedAdd size={50}/>
           <p>Atendimento</p>
