@@ -78,7 +78,7 @@ export default function () {
 
         <Row className='text-center mt-5'>
           <Col>
-            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => navigate('/atendimento/3')}>
+            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => navigate('/atendimento/4')}>
               Enviar
             </Button>
           </Col>

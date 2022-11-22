@@ -102,3 +102,11 @@
 .demo-content {
   position: relative;
 }
+
+.medico-size {
+  max-width: 200px;
+}
+
+.medico-size-text {
+  max-width: 300px;
+}
