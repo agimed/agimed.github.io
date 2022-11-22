@@ -1,5 +1,5 @@
 import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 
 import '../global.css'
@@ -29,6 +29,7 @@ const sintomas = [
 
 
 function ModalText({ showModal, setShowModal }) {
+  const navigate = useNavigate()
   function fecharModal() {
     setShowModal(false)
   }
@@ -53,7 +54,7 @@ function ModalText({ showModal, setShowModal }) {
       <Modal.Footer className='text-center'>
         <div className="w-100">
           <Button className="w-25 me-2" variant='custom-secondary' onClick={fecharModal}>Cancelar</Button>
-          <Button className="w-25 ms-2" variant='custom-primary' onClick={fecharModal}>Salvar</Button>
+          <Button className="w-25 ms-2" variant='custom-primary' onClick={() => {fecharModal(); navigate('/historico/1')}}>Salvar</Button>
         </div>
       </Modal.Footer>
     </Modal>
