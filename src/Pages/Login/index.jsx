@@ -1,11 +1,12 @@
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import './index.css'
+import '../global.css'
 
 import arrowLeftImg from '../../assets/arrow-left.svg'
 
 export default function () {
+  const navigate = useNavigate()
   return (
     <Container className='align-items-center mt-5'>
       <Row>
@@ -52,7 +53,7 @@ export default function () {
             </Col>
 
             <Col className='text-start'>
-              <Button type="submit" variant='custom-primary' className='w-50'>
+              <Button variant='custom-primary' className='w-50' onClick={() => navigate('/atendimento')}>
                 Entrar
               </Button>
             </Col>
