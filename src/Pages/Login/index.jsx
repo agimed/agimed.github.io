@@ -1,5 +1,5 @@
 import { Button, Col, Container, Row, Form } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import '../global.css'
 
@@ -7,6 +7,7 @@ import arrowLeftImg from '../../assets/arrow-left.svg'
 
 export default function () {
   const navigate = useNavigate()
+  const { tipoUsuario } = useParams()
   return (
     <Container className='align-items-center mt-5'>
       <Row>
@@ -25,7 +26,7 @@ export default function () {
           <div style={{maxWidth: '500px', display: 'inline-block'}} className='w-100'>
             <img src='https://projetopuc.blob.core.windows.net/agimed/LogoMarca.svg' />
             <h1 className="title-custom-primary text-end"> 
-              Paciente
+              { tipoUsuario === 'paciente' ? 'paciente' : 'médico' }
             </h1>
           </div>
         </Col>

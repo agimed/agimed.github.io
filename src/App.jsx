@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 
+import TipoConta from './Pages/TipoConta';
 import Login from './Pages/Login';
 import Atendimento from './Pages/Atendimento';
 import Atendimento1 from './Pages/Atendimento1';
@@ -27,7 +28,8 @@ function P1() {
 function App() {
   return (
     <Routes>
-      <Route path='/' element={<Login />} />
+      <Route path='/' element={<TipoConta />} />
+      <Route path='/login/:tipoUsuario' element={<Login />} />
       <Route path='/atendimento' element={<Atendimento />} />
       <Route path='/atendimento/1' element={<Atendimento1 />} />
       <Route path='/atendimento/2' element={<Atendimento2 />} />
