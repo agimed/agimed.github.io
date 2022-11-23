@@ -24,7 +24,8 @@ const sintomas = [
   'Cansaço',
   'Dores no Peito',
   'Vertigem',
-  'Muita Sede'
+  'Muita Sede',
+  'Outros'
 ]
 
 
@@ -62,7 +63,7 @@ function ModalText({ showModal, setShowModal }) {
 }
 
 export default function () {
-  const [showModal, setShowModal] = useState(true)
+  const [showModal, setShowModal] = useState(false)
   return (
     <>
       <Container className='mt-5' fluid={true}>
