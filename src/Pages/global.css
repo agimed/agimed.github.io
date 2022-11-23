@@ -154,3 +154,10 @@
   opacity: 0.5;
   transition: 0.3s;
 }
+
+.faixa-superior {  
+  font-size: xx-large;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

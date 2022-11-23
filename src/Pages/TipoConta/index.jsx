@@ -6,7 +6,9 @@ import '../global.css'
 export default function () {
   return (
     <div>
-      <div className="faixa"></div>
+      <div className="faixa faixa-superior">
+        Tipo de conta
+      </div>
 
       <div className="conta-container">
           <div className="caixa-container">
