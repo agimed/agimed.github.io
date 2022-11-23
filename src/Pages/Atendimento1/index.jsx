@@ -62,7 +62,7 @@ export default function () {
         </Row>
       </Container>
 
-      <div className="mt-5" />
+      <div className="end-of-page" />
       <div className='bg-custom-primary text-center fixed-bottom footer'>
         <Button variant='custom-primary'>
           <BiMessageRoundedAdd size={50}/>
