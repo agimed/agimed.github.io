@@ -47,13 +47,13 @@ export default function () {
           </Form.Group>
           <Row className='mt-5'>
             <Col className='text-end'>
-              <Button variant='custom-secondary' className="w-50">
+              <Button variant='custom-secondary' className="w-75">
                 Cadastro
               </Button>
             </Col>
 
             <Col className='text-start'>
-              <Button variant='custom-primary' className='w-50' onClick={() => navigate('/atendimento')}>
+              <Button variant='custom-primary' className='w-75' onClick={() => navigate('/atendimento')}>
                 Entrar
               </Button>
             </Col>
