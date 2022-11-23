@@ -7,7 +7,7 @@ export default function () {
   return (
     <div>
       <div className="faixa faixa-superior">
-        Tipo de conta
+        Tipo de perfil
       </div>
 
       <div className="conta-container">
