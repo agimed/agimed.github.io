@@ -94,7 +94,7 @@ export default function () {
           </Form.Group>
           <Row className='mt-5'>
             <Col className='text-end'>
-              <Button variant='custom-secondary' className="w-75">
+              <Button variant='custom-secondary' className="w-75" onClick={() => navigate('/cadastro')}>
                 Cadastro
               </Button>
             </Col>
