@@ -83,24 +83,34 @@ export default function () {
           <hr className='mt-5 mb-5' />
 
 
-          <Form.Check 
-            type="switch"
+
+          <Form.Check
+            type="radio"
             id="cadastroTipoUsuario"
-            label={`Sou ${formik.values.tipoUsuario === 'paciente' ? 'paciente' : 'médico'}`}
+            label="Sou paciente"
+            value="paciente"
             checked={formik.values.tipoUsuario === 'paciente'}
             onChange={e => formik.setFieldValue('tipoUsuario', e.target.checked ? 'paciente' : 'medico')}
           />
-          
+          <Form.Check
+            type="radio"
+            id="cadastroTipoUsuario1"
+            label="Sou médico"
+            value="medico"
+            checked={formik.values.tipoUsuario === 'medico'}
+            onChange={e => formik.setFieldValue('tipoUsuario', e.target.checked ? 'medico' : 'paciente')}
+          />
+          <div className='mb-4' />
 
           {formik.values.tipoUsuario === 'paciente' ? (
             <>
               <Form.Group className="mb-3" controlId="cadastroAlergias">
                 <Form.Label className='color-custom-primary'>Alergias <sub>(1 por linha)</sub></Form.Label>
-                <Form.Control required className='input-custom-primary' type="text" as='textarea' onChange={formik.handleChange} value={formik.values.alergias} name='alergias' />
+                <Form.Control required rows={5} className='input-custom-primary' type="text" as='textarea' onChange={formik.handleChange} value={formik.values.alergias} name='alergias' />
               </Form.Group>
               <Form.Group className="mb-3" controlId="cadastroDoencasCronicas">
                 <Form.Label className='color-custom-primary'>Doenças crônicas <sub>(1 por linha)</sub></Form.Label>
-                <Form.Control required className='input-custom-primary' type="text" as='textarea' onChange={formik.handleChange} value={formik.values.doencasCronicas} name='doencasCronicas' />
+                <Form.Control required rows={5} className='input-custom-primary' type="text" as='textarea' onChange={formik.handleChange} value={formik.values.doencasCronicas} name='doencasCronicas' />
               </Form.Group>
             </>
           ) : (
