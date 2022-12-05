@@ -29,6 +29,9 @@ export default function () {
 
       crm: '',
       especialidade: '',
+    },
+    onSubmit: async (values) => {
+      swal(JSON.stringify(values, null, 2))
     }
   })
 
@@ -164,7 +167,7 @@ export default function () {
       
 
       <Row>
-        <Form>
+        <Form onSubmit={formik.handleSubmit}>
 
           <Form.Group className="mb-3" controlId="cadastroNomeCompleto">
             <Form.Label className='color-custom-primary'>Nome Completo</Form.Label>
@@ -255,11 +258,11 @@ export default function () {
             <>
               <Form.Group className="mb-3" controlId="cadastroAlergias">
                 <Form.Label className='color-custom-primary'>Alergias <sub>(1 por linha)</sub></Form.Label>
-                <Form.Control required rows={5} className='input-custom-primary' type="text" as='textarea' onChange={formik.handleChange} value={formik.values.alergias} name='alergias' />
+                <Form.Control rows={5} className='input-custom-primary' type="text" as='textarea' onChange={formik.handleChange} value={formik.values.alergias} name='alergias' />
               </Form.Group>
               <Form.Group className="mb-3" controlId="cadastroDoencasCronicas">
                 <Form.Label className='color-custom-primary'>Doenças crônicas <sub>(1 por linha)</sub></Form.Label>
-                <Form.Control required rows={5} className='input-custom-primary' type="text" as='textarea' onChange={formik.handleChange} value={formik.values.doencasCronicas} name='doencasCronicas' />
+                <Form.Control rows={5} className='input-custom-primary' type="text" as='textarea' onChange={formik.handleChange} value={formik.values.doencasCronicas} name='doencasCronicas' />
               </Form.Group>
             </>
           ) : (
