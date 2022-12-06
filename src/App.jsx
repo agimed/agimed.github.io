@@ -15,6 +15,7 @@ import Atendimento2 from './Pages/Atendimento2';
 import Atendimento3 from './Pages/Atendimento3';
 import AtendimentoConfirmacao from './Pages/AtendimentoConfirmacao';
 import CadastroUsuario from './Pages/CadastroUsuario';
+import Perfil from './Pages/Perfil';
 
 
 function P1() {
@@ -37,6 +38,7 @@ function App() {
       <Route path='/atendimento/2' element={<Atendimento2 />} />
       <Route path='/atendimento/3' element={<Atendimento3 />} />
       <Route path='/atendimento/4' element={<AtendimentoConfirmacao />} />
+      <Route path='/perfil' element={<Perfil />} />
       <Route path='/' element={<P1 />} />
       <Route path='/about' element={<div>Cole mano 2</div>}/>
     </Routes>

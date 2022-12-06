@@ -161,3 +161,10 @@
   justify-content: center;
   align-items: center;
 }
+
+.clear-link {
+  all: unset;
+}
+.clear-link:hover {
+  all: unset;
+}

@@ -116,8 +116,10 @@ export default function () {
           <p>Respostas</p>
         </Button>
         <Button variant='custom-primary' >
-          <BiUser size={50}/>
-          <p>Perfil</p>
+          <Link  to='/perfil' className='clear-link'>
+            <BiUser size={50}/>
+            <p>Perfil</p>
+          </Link>
         </Button>
       </div>
       <ModalText showModal={showModal} setShowModal={setShowModal} />
