@@ -168,3 +168,30 @@
 .clear-link:hover {
   all: unset;
 }
+
+
+/* MENSAGENS */
+
+.container-mensagens {
+  display: flex;
+  flex-direction: column;
+}
+
+.box-message-received {
+  border: 1px var(--primary) solid;
+  color: var(--primary);
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 1080px;
+  align-self: flex-start;
+}
+
+.box-message-sended {
+  border: 1px var(--primary) solid;
+  background-color: var(--primary);
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  max-width: 1080px;
+  align-self: flex-end;
+}

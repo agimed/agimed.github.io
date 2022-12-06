@@ -17,6 +17,7 @@ import AtendimentoConfirmacao from './Pages/AtendimentoConfirmacao';
 import CadastroUsuario from './Pages/CadastroUsuario';
 import Perfil from './Pages/Perfil';
 import Respostas from './Pages/Respostas';
+import Mensagens from './Pages/Mensagens';
 
 
 function P1() {
@@ -41,6 +42,7 @@ function App() {
       <Route path='/atendimento/4' element={<AtendimentoConfirmacao />} />
       <Route path='/perfil' element={<Perfil />} />
       <Route path='/respostas' element={<Respostas />} />
+      <Route path='/respostas/:conversa' element={<Mensagens />} />
       <Route path='/' element={<P1 />} />
       <Route path='/about' element={<div>Cole mano 2</div>}/>
     </Routes>
