@@ -1,20 +1,29 @@
 import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
-import { BsDownload } from 'react-icons/bs'
+import { AiOutlineSend } from 'react-icons/ai'
 
 import '../global.css'
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { useEffect } from "react";
 
 export default function () {
   const navigate = useNavigate()
+  const endOfPageComponent = useRef(null)
+
+  useEffect(() => {
+    if(endOfPageComponent.current) {
+      endOfPageComponent.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [endOfPageComponent.current])
 
   return (
     <>
-      <div className="faixa faixa-superior text-center">
+      <div className="faixa faixa-superior text-center fixed-top">
         Otorrinolaringologia
       </div>
-      <Container className='mt-4' fluid={true}>
+      <Container className='mt-5' fluid={true}>
+        <div className="pt-5 mb-4" />
         <div className="container-mensagens">
           <div className='text-start w-100 mb-3 box-message-received'>
             <h6>Ricardo Leandro Maximiliano</h6>
@@ -52,24 +61,32 @@ export default function () {
           </div>
         </div>
 
-          
-          
+        <div ref={endOfPageComponent}/>
       </Container>
 
+
       <div className="end-of-page" />
-      <div className='bg-custom-primary text-center fixed-bottom footer'>
-        <Button variant='custom-primary' onClick={() => navigate('/atendimento')}>
-            <BiMessageRoundedAdd size={50}/>
-            <p>Atendimento</p>
-        </Button>
-        <Button variant='custom-primary' onClick={() => navigate('/respostas')}>
-          <BiMessageAltError size={50}/>
-          <p>Respostas</p>
-        </Button>
-        <Button variant='custom-primary' onClick={() => navigate('/perfil')}>
-          <BiUser size={50}/>
-          <p>Perfil</p>
-        </Button>
+      <div className='fixed-bottom'>
+        <div className="caixa-barra-mensagem mb-1">
+          <textarea rows={2} className='input-custom-primary p-1 rounded text'  type="text" />
+          <Button variant='custom-secondary'>
+            <AiOutlineSend />
+          </Button>
+        </div>
+        <div className='bg-custom-primary text-center footer'>
+          <Button variant='custom-primary' onClick={() => navigate('/atendimento')}>
+              <BiMessageRoundedAdd size={50}/>
+              <p>Atendimento</p>
+          </Button>
+          <Button variant='custom-primary' onClick={() => navigate('/respostas')}>
+            <BiMessageAltError size={50}/>
+            <p>Respostas</p>
+          </Button>
+          <Button variant='custom-primary' onClick={() => navigate('/perfil')}>
+            <BiUser size={50}/>
+            <p>Perfil</p>
+          </Button>
+        </div>
       </div>
     </>
   )

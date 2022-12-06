@@ -195,3 +195,18 @@
   max-width: 1080px;
   align-self: flex-end;
 }
+
+.caixa-barra-mensagem {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.caixa-barra-mensagem > .text {
+  flex-grow: 1;
+}
+
+.caixa-barra-mensagem > textarea {
+  resize: none;
+}
