@@ -90,15 +90,15 @@ export default function () {
 
       <div className="end-of-page" />
       <div className='bg-custom-primary text-center fixed-bottom footer'>
-        <Button variant='custom-primary'>
-          <BiMessageRoundedAdd size={50}/>
-          <p>Atendimento</p>
+        <Button variant='custom-primary' onClick={() => navigate('/atendimento')}>
+            <BiMessageRoundedAdd size={50}/>
+            <p>Atendimento</p>
         </Button>
-        <Button variant='custom-primary' >
+        <Button variant='custom-primary' onClick={() => navigate('/respostas')}>
           <BiMessageAltError size={50}/>
           <p>Respostas</p>
         </Button>
-        <Button variant='custom-primary' >
+        <Button variant='custom-primary' onClick={() => navigate('/perfil')}>
           <BiUser size={50}/>
           <p>Perfil</p>
         </Button>

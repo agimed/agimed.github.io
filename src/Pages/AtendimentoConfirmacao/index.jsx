@@ -1,5 +1,5 @@
 import { Button, Col, Container, Row } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 
 import arrowLeftImg from '../../assets/arrow-left.svg'
@@ -7,6 +7,8 @@ import arrowLeftImg from '../../assets/arrow-left.svg'
 import '../global.css'
 
 export default function () {
+  const navigate = useNavigate()
+
   return (
     <>
       <Container className='mt-5' fluid={true}>
@@ -39,15 +41,15 @@ export default function () {
 
       <div className="end-of-page" />
       <div className='bg-custom-primary text-center fixed-bottom footer'>
-        <Button variant='custom-primary'>
-          <BiMessageRoundedAdd size={50}/>
-          <p>Atendimento</p>
+        <Button variant='custom-primary' onClick={() => navigate('/atendimento')}>
+            <BiMessageRoundedAdd size={50}/>
+            <p>Atendimento</p>
         </Button>
-        <Button variant='custom-primary' >
+        <Button variant='custom-primary' onClick={() => navigate('/respostas')}>
           <BiMessageAltError size={50}/>
           <p>Respostas</p>
         </Button>
-        <Button variant='custom-primary' >
+        <Button variant='custom-primary' onClick={() => navigate('/perfil')}>
           <BiUser size={50}/>
           <p>Perfil</p>
         </Button>

@@ -63,6 +63,8 @@ function ModalText({ showModal, setShowModal }) {
 }
 
 export default function () {
+  const navigate = useNavigate()
+
   const [showModal, setShowModal] = useState(false)
   return (
     <>
@@ -107,19 +109,17 @@ export default function () {
 
       <div className="end-of-page" />
       <div className='bg-custom-primary text-center fixed-bottom footer'>
-        <Button variant='custom-primary'>
-          <BiMessageRoundedAdd size={50}/>
-          <p>Atendimento</p>
+        <Button variant='custom-primary' onClick={() => navigate('/atendimento')}>
+            <BiMessageRoundedAdd size={50}/>
+            <p>Atendimento</p>
         </Button>
-        <Button variant='custom-primary' >
+        <Button variant='custom-primary' onClick={() => navigate('/respostas')}>
           <BiMessageAltError size={50}/>
           <p>Respostas</p>
         </Button>
-        <Button variant='custom-primary' >
-          <Link  to='/perfil' className='clear-link'>
-            <BiUser size={50}/>
-            <p>Perfil</p>
-          </Link>
+        <Button variant='custom-primary' onClick={() => navigate('/perfil')}>
+          <BiUser size={50}/>
+          <p>Perfil</p>
         </Button>
       </div>
       <ModalText showModal={showModal} setShowModal={setShowModal} />
