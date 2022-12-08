@@ -8,6 +8,7 @@ import '../global.css'
 import { useAtendimentoContext } from "../../Providers/Atendimento";
 import { useEffect } from "react";
 import { useFormik } from "formik";
+import swal from "sweetalert";
 
 const doencas = [
   'No estomago',
@@ -108,7 +109,7 @@ export default function () {
             {formik.values.realizandoTratamento ? (
               <>
                 <p className="mb-0">Nos diga qual/quais?</p>
-                <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}}/>
+                <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}} name="descricaoTratamento" onChange={formik.handleChange}/>
               </>
             ) : null}
           </div>
@@ -119,6 +120,14 @@ export default function () {
         <Row className='text-center mt-5'>
           <Col>
             <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => {
+              if(formik.values.realizandoTratamento && !formik.values.descricaoTratamento?.trim()) {
+                swal({
+                  icon: 'error',
+                  text: 'Descreva o tratamento',
+                })
+                return
+              }
+
               dispatchAtendimento({
                 type: 'set',
                 step: 2,

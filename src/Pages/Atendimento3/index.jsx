@@ -6,11 +6,23 @@ import arrowLeftImg from '../../assets/arrow-left.svg'
 
 import '../global.css'
 import { useAtendimentoContext } from "../../Providers/Atendimento";
+import { useEffect } from "react";
 
 export default function () {
   const navigate = useNavigate()
   const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
-  console.log(stateAtendimento)
+
+  useEffect(() => {
+    if(!stateAtendimento.phases[2]) {
+      dispatchAtendimento({ type: 'reset' })
+      navigate('/atendimento')
+    }
+  }, [])
+
+  if(!stateAtendimento.phases[2]) {
+    return null
+  }
+
   return (
     <>
       <Container className='mt-5' fluid={true}>
@@ -36,34 +48,36 @@ export default function () {
         <h3 className="color-custom-primary h6 ps-2 mt-4 fw-bold">Meus sintomas</h3>
 
         <div className="border-custom-primary bg-custom-primary">
-          <div className='p-2'>Falta de ar</div>
-          <div className='p-2'>Nausea</div>
-          
-          <div className='d-flex justify-content-between p-2'>
-            <div>Outros</div>
-            <div><BiDownArrow /></div>
-          </div>
-          <div className="bg-white color-custom-primary p-2">Sinto cansado e com muito sono assim que acordo. Mesmo dormindo 8 horas.</div>
+          {
+            stateAtendimento.phases[0].sintomas.map( sintoma => {
+              return <div className='p-2' key={sintoma}>{sintoma}</div>
+            })
+          }
+          {
+            stateAtendimento.phases[0].resumo ? (
+              <div className="bg-white color-custom-primary p-2">{stateAtendimento.phases[0].resumo}</div>
+            ) : null
+          }
         </div>
 
 
         <div className="p-2 color-custom-primary mt-4">
-          <p className='mb-1'><b>Alergias:</b> Em branco.</p>
-          <p className='mb-1'><b>Medicamentos:</b> Em branco.</p>
-          <p className='mb-1'><b>Gravidez:</b> Não.</p>
+          <p className='mb-1'><b>Alergias:</b> {stateAtendimento.phases[1].alergia?.trim() ? stateAtendimento.phases[1].alergia?.trim() : 'Em branco.'}</p>
+          <p className='mb-1'><b>Medicamentos:</b> {stateAtendimento.phases[1].medicamento?.trim() ? stateAtendimento.phases[1].medicamento?.trim() : 'Em branco.'}</p>
+          <p className='mb-1'><b>Gravidez:</b> {stateAtendimento.phases[1].gravida ? 'Sim' : 'Não'}.</p>
         </div>
 
 
         <h3 className="color-custom-primary h6 ps-2 mt-4 fw-bold">Meu Histórico</h3>
-        <div className="border-custom-primary bg-custom-primary p-1">
-          Doença Renal
-        </div>
-        <div className="border-custom-primary bg-custom-primary p-1">
-          Diabetes
-        </div>
+        {stateAtendimento.phases[2].doencas.map( i => (
+          <div key={i} className="border-custom-primary bg-custom-primary p-1">
+            {i}
+          </div>
+        ))}
+
 
         <div className="p-2 color-custom-primary mt-2">
-          <p className='mb-1'><b>Tratamento:</b> Em branco.</p>
+          <p className='mb-1'><b>Tratamento:</b> {stateAtendimento.phases[2].descricaoTratamento?.trim() ? stateAtendimento.phases[2].descricaoTratamento?.trim() : 'Em branco.'}</p>
         </div>
 
 

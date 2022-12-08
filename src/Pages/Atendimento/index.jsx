@@ -27,7 +27,8 @@ const sintomas = [
   'Cansaço',
   'Dores no Peito',
   'Vertigem',
-  'Muita Sede'
+  'Muita Sede',
+  'Outros'
 ]
 
 
@@ -130,7 +131,7 @@ export default function () {
 
         <Row className='text-center mt-5'>
           <Col>
-            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => setShowModal(true)}>
+            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => setShowModal(true)} disabled={formik.values.sintomas.length === 0}>
               Próximo
             </Button>
           </Col>
