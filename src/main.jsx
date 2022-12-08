@@ -5,9 +5,9 @@ import App from './App'
 import { ProviderAtendimento } from './Providers/Atendimento'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <ProviderAtendimento>
-    <BrowserRouter basename={import.meta.env.BASE_URL || ''}>
+  <BrowserRouter basename={import.meta.env.BASE_URL || ''}>
+    <ProviderAtendimento>
       <App />
-    </BrowserRouter>
-  </ProviderAtendimento>
+    </ProviderAtendimento>
+  </BrowserRouter>
 )

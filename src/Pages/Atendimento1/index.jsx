@@ -1,14 +1,36 @@
-import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
+import { Button, Col, Container, Row, Form, Modal, FormFloating } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 
 import arrowLeftImg from '../../assets/arrow-left.svg'
 
 import '../global.css'
-import { useState } from "react";
+import { useFormik } from "formik";
+import { useAtendimentoContext } from "../../Providers/Atendimento";
+import { useEffect } from "react";
 
 export default function () {
   const navigate = useNavigate()
+
+
+  const formik = useFormik({
+    initialValues: {
+      alergia: '',
+      medicamento: '',
+      gravida: false,
+    }
+  })
+
+  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
+
+  useEffect(() => {
+    if(!stateAtendimento.phases[0]) {
+      navigate('/atendimento')
+    }
+  }, [])
+
+
+  
   return (
     <>
       <Container className='mt-5' fluid={true}>
@@ -36,18 +58,20 @@ export default function () {
             <h1>Histórico</h1>
 
             <p className="mb-0">Possui alergia a alguma substância ou medicamento?<br/>(Caso não possua deixe em branco)</p>
-            <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}}/>
+            <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}} name='alergia' onChange={formik.handleChange} />
 
 
 
             <p className="mb-0 mt-3">Faz uso de algum medicamento? Se sim diga-nos também a dosage.<br/>(Caso não possua deixe em branco)</p>
-            <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}}/>
+            <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}} name='medicamento' onChange={formik.handleChange} />
 
             <Form.Check
               className='mt-2'
               type='checkbox'
               id='check_gravida'
               label="Está gravida ou suspeita de gravidez?"
+              checked={formik.values.gravida}
+              onChange={event => formik.setFieldValue('gravida', event.target.checked)}
             />
           </div>
         </Row>
@@ -55,7 +79,14 @@ export default function () {
 
         <Row className='text-center mt-5'>
           <Col>
-            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => navigate('/atendimento/2')}>
+            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => {
+              dispatchAtendimento({
+                type: 'set',
+                step: 1,
+                payload: formik.values
+              })
+              navigate('/atendimento/2')
+            }}>
               Próximo
             </Button>
           </Col>

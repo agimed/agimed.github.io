@@ -5,21 +5,12 @@ import { BiMessageRoundedAdd, BiMessageAltError, BiUser, BiDownArrow } from 'rea
 import arrowLeftImg from '../../assets/arrow-left.svg'
 
 import '../global.css'
-
-const doencas = [
-  'No estomago',
-  'No figado',
-  'Cardiaca',
-  'Tuberculose',
-  'Asma',
-  'Intestinal',
-  'Renal',
-  'Diabetes',
-  'Hipertensão'
-]
+import { useAtendimentoContext } from "../../Providers/Atendimento";
 
 export default function () {
   const navigate = useNavigate()
+  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
+  console.log(stateAtendimento)
   return (
     <>
       <Container className='mt-5' fluid={true}>

@@ -5,6 +5,9 @@ import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 import arrowLeftImg from '../../assets/arrow-left.svg'
 
 import '../global.css'
+import { useAtendimentoContext } from "../../Providers/Atendimento";
+import { useEffect } from "react";
+import { useFormik } from "formik";
 
 const doencas = [
   'No estomago',
@@ -20,6 +23,22 @@ const doencas = [
 
 export default function () {
   const navigate = useNavigate()
+
+  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
+  useEffect(() => {
+    if(!stateAtendimento.phases[1]) {
+      navigate('/atendimento')
+    }
+  },[])
+
+  const formik = useFormik({
+    initialValues: {
+      doencas: [],
+      realizandoTratamento: false,
+      descricaoTratamento: ''
+    }
+  })
+
   return (
     <>
       <Container className='mt-5' fluid={true}>
@@ -57,6 +76,16 @@ export default function () {
                       type='checkbox'
                       id={`lcs-${doenca}`}
                       label={`${doenca}`}
+                      value={doenca}
+                      checked={formik.values.doencas.includes(doenca)}
+                      onChange={event => {
+                        const {value, checked} = event.target
+                        if(checked) {
+                          formik.setFieldValue('doencas', [...formik.values.doencas, value])
+                        } else {
+                          formik.setFieldValue('doencas', formik.values.doencas.filter( i => i !== value))
+                        }
+                      }}
                     />
                   </Col>
 
@@ -70,10 +99,18 @@ export default function () {
               type='checkbox'
               id='check_gravida'
               label="Está realizando algum tratamento?"
+              onChange={event => {
+                const {checked} = event.target
+                formik.setFieldValue('realizandoTratamento', checked)
+              }}
             />
 
-            <p className="mb-0">Nos diga qual/quais?</p>
-            <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}}/>
+            {formik.values.realizandoTratamento ? (
+              <>
+                <p className="mb-0">Nos diga qual/quais?</p>
+                <textarea className="w-100 input-custom-primary" style={{minHeight: '100px'}}/>
+              </>
+            ) : null}
           </div>
         </div>
         </Row>
@@ -81,7 +118,14 @@ export default function () {
 
         <Row className='text-center mt-5'>
           <Col>
-            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => navigate('/atendimento/3')}>
+            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => {
+              dispatchAtendimento({
+                type: 'set',
+                step: 2,
+                payload: formik.values
+              })
+              navigate('/atendimento/3')
+            }}>
               Próximo
             </Button>
           </Col>
