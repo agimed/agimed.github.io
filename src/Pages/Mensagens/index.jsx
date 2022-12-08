@@ -4,6 +4,8 @@ import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 import { AiOutlineSend } from 'react-icons/ai'
 import { BsCardImage } from 'react-icons/bs'
 
+import { useLoadingContext } from '../../Providers/Loading'
+
 import '../global.css'
 import { useState, useRef } from "react";
 import { useEffect } from "react";
@@ -13,7 +15,7 @@ export default function () {
   const endOfPageComponent = useRef(null)
   const inputFile = useRef(null)
   const [file, setFile] = useState(null)
-  
+  const [,setLoading] = useLoadingContext()
 
   useEffect(() => {
     if(endOfPageComponent.current) {
@@ -22,6 +24,7 @@ export default function () {
   }, [endOfPageComponent.current])
 
   function loadFile(event) {
+    setLoading(true)
     const file = event.target.files[0]
     const reader = new FileReader()
     reader.readAsDataURL(file)
@@ -29,6 +32,7 @@ export default function () {
       const content = reader.result.toString()
       setFile(content)
       // enviar o arquivo aqui
+      setLoading(false)
       event.target.value = ''
       console.log(content)
     }
