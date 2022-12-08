@@ -2,8 +2,11 @@ import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 
+import { useAtendimentoContext } from '../../Providers/Atendimento'
+
 import '../global.css'
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { useFormik } from "formik";
 
 const sintomas = [
   'Febre',
@@ -24,14 +27,14 @@ const sintomas = [
   'Cansaço',
   'Dores no Peito',
   'Vertigem',
-  'Muita Sede',
-  'Outros'
+  'Muita Sede'
 ]
 
 
-function ModalText({ showModal, setShowModal }) {
-  const navigate = useNavigate()
-  function fecharModal() {
+function ModalText({ showModal, setShowModal, callbackValue = () => {} }) {
+  const refValue = useRef(null)
+  function fecharModal(value = null) {
+    callbackValue(value)
     setShowModal(false)
   }
 
@@ -50,12 +53,14 @@ function ModalText({ showModal, setShowModal }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <textarea className="w-100 input-custom-primary" style={{minHeight: '300px'}}/>
+        <textarea ref={refValue} className="w-100 input-custom-primary" style={{minHeight: '300px'}}/>
       </Modal.Body>
       <Modal.Footer className='text-center'>
         <div className="w-100">
-          <Button className="w-25 pe-1 ps-1 me-2" variant='custom-secondary' onClick={fecharModal}>Cancelar</Button>
-          <Button className="w-25 pe-1 ps-1 ms-2" variant='custom-primary' onClick={() => {fecharModal(); navigate('/atendimento/1')}}>Salvar</Button>
+          <Button className="w-25 pe-1 ps-1 me-2" variant='custom-secondary' onClick={() => fecharModal()}>Cancelar</Button>
+          <Button className="w-25 pe-1 ps-1 ms-2" variant='custom-primary' onClick={() => {
+            fecharModal(refValue.current?.value)
+          }}>Salvar</Button>
         </div>
       </Modal.Footer>
     </Modal>
@@ -63,7 +68,22 @@ function ModalText({ showModal, setShowModal }) {
 }
 
 export default function () {
+
+  const formik = useFormik({
+    initialValues: {
+      sintomas: [],
+      resumo: '',
+    }
+  })
+
   const navigate = useNavigate()
+
+  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
+  if(stateAtendimento.phases[0]) {
+    navigate('/atendimento/1')
+  }
+  
+
 
   const [showModal, setShowModal] = useState(false)
   return (
@@ -90,6 +110,16 @@ export default function () {
                       type='checkbox'
                       id={`lcs-${sintoma}`}
                       label={`${sintoma}`}
+                      value={sintoma}
+                      checked={formik.values.sintomas.includes(sintoma)}
+                      onChange={event => {
+                        const {value, checked} = event.target
+                        if(checked) {
+                          formik.setFieldValue('sintomas', [...formik.values.sintomas, value])
+                        } else {
+                          formik.setFieldValue('sintomas', formik.values.sintomas.filter( i => i !== value))
+                        }
+                      }}
                     />
                   </Col>
 
@@ -122,7 +152,17 @@ export default function () {
           <p>Perfil</p>
         </Button>
       </div>
-      <ModalText showModal={showModal} setShowModal={setShowModal} />
+      <ModalText showModal={showModal} setShowModal={setShowModal} callbackValue={(resumo) => {
+        formik.setFieldValue('resumo', resumo)
+        if(resumo) {
+          const payload = {...formik.values, resumo}
+          dispatchAtendimento({
+            type: 'set',
+            step: 0,
+            payload,
+          })
+        }
+      } } />
     </>
   )
 }
