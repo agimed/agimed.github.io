@@ -33,7 +33,7 @@ const sintomas = [
 
 
 function ModalText({ showModal, setShowModal, callbackValue = () => {} }) {
-  const refValue = useRef(null)
+  const [value, setValue] = useState('')
   function fecharModal(value = null) {
     callbackValue(value)
     setShowModal(false)
@@ -54,13 +54,13 @@ function ModalText({ showModal, setShowModal, callbackValue = () => {} }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <textarea ref={refValue} className="w-100 input-custom-primary" style={{minHeight: '300px'}}/>
+        <textarea onChange={event => setValue(event.target.value.trim())} value={value} className="w-100 input-custom-primary" style={{minHeight: '300px'}}/>
       </Modal.Body>
       <Modal.Footer className='text-center'>
         <div className="w-100">
           <Button className="w-25 pe-1 ps-1 me-2" variant='custom-secondary' onClick={() => fecharModal()}>Cancelar</Button>
-          <Button className="w-25 pe-1 ps-1 ms-2" variant='custom-primary' onClick={() => {
-            fecharModal(refValue.current?.value)
+          <Button className="w-25 pe-1 ps-1 ms-2" variant='custom-primary' disabled={!value} onClick={() => {
+            fecharModal(value)
           }}>Salvar</Button>
         </div>
       </Modal.Footer>
