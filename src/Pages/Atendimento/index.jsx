@@ -80,11 +80,6 @@ export default function () {
   const navigate = useNavigate()
 
   const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
-  if(stateAtendimento.phases[0]) {
-    navigate('/atendimento/1')
-  }
-  
-
 
   const [showModal, setShowModal] = useState(false)
   return (
@@ -162,6 +157,7 @@ export default function () {
             step: 0,
             payload,
           })
+          navigate('/atendimento/1')
         }
       } } />
     </>

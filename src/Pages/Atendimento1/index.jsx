@@ -37,7 +37,7 @@ export default function () {
 
       <Row style={{display: 'flex', alignItems: 'center'}}>
         <Col>
-          <Link className='link-custom-primary' to='/'>
+          <Link className='link-custom-primary' to='/atendimento'>
             <p>
               <img src={arrowLeftImg} style={{ width: '30px' }} />
               Voltar
