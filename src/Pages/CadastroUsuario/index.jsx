@@ -1,5 +1,6 @@
 import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
+import { User } from "../../Services/User";
 
 import '../global.css'
 
@@ -10,6 +11,8 @@ import swal from "sweetalert";
 
 
 export default function () {
+  const navigate = useNavigate()
+
   const formik = useFormik({
     initialValues: {
       tipoUsuario: 'paciente',
@@ -31,11 +34,33 @@ export default function () {
       especialidade: '',
     },
     onSubmit: async (values) => {
-      swal(JSON.stringify(values, null, 2))
+      const newUser = new User(values.email, values.senha);
+      const signUpStatus = await newUser.register({
+        tipoUsuario: values.tipoUsuario,
+        nomeCompleto: values.nomeCompleto,
+        cpf: values.cpf,
+        cep: values.cep,
+        numero: values.numero,
+        complemento: values.complemento,
+        endereco: values.endereco,
+        alergias: values.alergias,
+        doencasCronicas: values.doencasCronicas,
+        crm: values.crm,
+        especialidade: values.especialidade,
+      });
+      console.table(signUpStatus);
+      if(!signUpStatus) {
+        swal({
+          icon: 'error',
+          text: 'Erro ao cadastrar usuário'
+        });
+        return;
+      }
+
+      if (values.tipoUsuario == 'paciente') navigate('/atendimento');
+      else navigate('/respostas');
     }
   })
-
-  const navigate = useNavigate()
 
   useEffect(() => {
     const {cep} = formik.values

@@ -1,6 +1,7 @@
 import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser, BiDownArrow } from 'react-icons/bi'
+import { User } from '../../Services/User';
 
 import arrowLeftImg from '../../assets/arrow-left.svg'
 
@@ -10,7 +11,21 @@ import { useEffect } from "react";
 
 export default function () {
   const navigate = useNavigate()
-  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
+  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext();
+
+  useEffect(() => {
+    const resolver = async () => {
+      try{
+        const signedUser = await User.getUser();
+        if (signedUser.user === null) {
+          navigate('/');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    resolver();
+  }, []);
 
   useEffect(() => {
     if(!stateAtendimento.phases[2]) {
@@ -83,7 +98,14 @@ export default function () {
 
         <Row className='text-center mt-5'>
           <Col>
-            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => navigate('/atendimento/4')}>
+            <Button variant='custom-primary' className='ps-5 pe-5 p-2' onClick={() => {
+                dispatchAtendimento({
+                  type: 'set',
+                  step: 3,
+                  payload: {}
+                })
+                navigate('/atendimento/4')
+              }}>
               Enviar
             </Button>
           </Col>

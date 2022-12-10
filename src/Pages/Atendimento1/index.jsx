@@ -1,6 +1,7 @@
 import { Button, Col, Container, Row, Form, Modal, FormFloating } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
+import { User } from '../../Services/User';
 
 import arrowLeftImg from '../../assets/arrow-left.svg'
 
@@ -12,6 +13,19 @@ import { useEffect } from "react";
 export default function () {
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const resolver = async () => {
+      try{
+        const signedUser = await User.getUser();
+        if (signedUser.user === null) {
+          navigate('/');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    resolver();
+  }, []);
 
   const formik = useFormik({
     initialValues: {

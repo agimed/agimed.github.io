@@ -1,12 +1,14 @@
 import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
+import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi';
+import { User } from '../../Services/User';
 
-import { useAtendimentoContext } from '../../Providers/Atendimento'
+import { useAtendimentoContext } from '../../Providers/Atendimento';
 
 import '../global.css'
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useFormik } from "formik";
+
 
 const sintomas = [
   'Febre',
@@ -54,7 +56,7 @@ function ModalText({ showModal, setShowModal, callbackValue = () => {} }) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <textarea onChange={event => setValue(event.target.value.trim())} value={value} className="w-100 input-custom-primary" style={{minHeight: '300px'}}/>
+        <textarea onChange={event => setValue(event.target.value)} value={value} className="w-100 input-custom-primary" style={{minHeight: '300px'}}/>
       </Modal.Body>
       <Modal.Footer className='text-center'>
         <div className="w-100">
@@ -69,6 +71,23 @@ function ModalText({ showModal, setShowModal, callbackValue = () => {} }) {
 }
 
 export default function () {
+  const [userName, setUserName] = useState('');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const resolver = async () => {
+      try{
+        const signedUser = await User.getUser();
+        if (signedUser.user === null) {
+          navigate('/');
+        }
+        setUserName(signedUser.meta.nomeCompleto);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    resolver();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -76,8 +95,6 @@ export default function () {
       resumo: '',
     }
   })
-
-  const navigate = useNavigate()
 
   const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
 
@@ -87,7 +104,7 @@ export default function () {
       <Container className='mt-5' fluid={true}>
         <Row>
           <div className='color-custom-primary fw-bold'>
-            <h1>Olá Andre!</h1>
+            <h1>Olá {userName}!</h1>
             <p>Preencha o questionário básico para iniciar um novo atendimento.</p>
           </div>
         </Row>

@@ -1,6 +1,7 @@
 import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
+import { User } from '../../Services/User';
 
 import arrowLeftImg from '../../assets/arrow-left.svg'
 
@@ -25,7 +26,22 @@ const doencas = [
 export default function () {
   const navigate = useNavigate()
 
-  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext()
+  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext();
+
+  useEffect(() => {
+    const resolver = async () => {
+      try{
+        const signedUser = await User.getUser();
+        if (signedUser.user === null) {
+          navigate('/');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    resolver();
+  }, []);
+
   useEffect(() => {
     if(!stateAtendimento.phases[1]) {
       navigate('/atendimento')

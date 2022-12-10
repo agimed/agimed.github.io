@@ -3,8 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
 import { AiOutlineSend } from 'react-icons/ai'
 import { BsCardImage } from 'react-icons/bs'
+import { useParams } from "react-router-dom";
 
-import { useLoadingContext } from '../../Providers/Loading'
+import { useLoadingContext } from '../../Providers/Loading';
+
+import { User } from '../../Services/User';
+import { HealthCare } from "../../Services/HealthCare";
+import { Message } from "../../Services/Message";
 
 import '../global.css'
 import { useState, useRef } from "react";
@@ -16,6 +21,109 @@ export default function () {
   const inputFile = useRef(null)
   const [file, setFile] = useState(null)
   const [,setLoading] = useLoadingContext()
+  const searchParams = useParams();
+  const [user, setUser] = useState({});
+  const [questions, setQuestions] = useState([]);
+  const [patientStatus, setpatientStatus] = useState(true);
+  const [firstMessageContent, setFirstMessageContent] = useState('');
+  const [doctorType, setDoctorType] = useState('');
+  const [chatMessages, setChatMessages] = useState([]);
+  const [chatOwner, setChatOwner] = useState('');
+
+  const questionID = searchParams.id;
+
+  async function handleNewMessage(event) {
+    event.preventDefault();
+    const data = new FormData(event.target)
+    const message = data.get('message');
+
+    console.log();
+
+    await Message.send(user.user.id, questionID, {
+      message,
+    });
+    if (user.user.id !== chatOwner) {
+      console.log(questionID, user.user.id, user);
+      await HealthCare.assignPhysician(questionID, user.user.id);
+    }
+    await loadMessages();
+  }
+
+  async function loadMessages() {
+    // patientStatus
+    const signedUser = await User.getUser();
+
+    const messagesFromThisChat = await Message.getMessages(signedUser.user.id, questionID);
+    console.log(messagesFromThisChat);
+    const finalMsg = messagesFromThisChat.map(singleMsg=> {
+      const messageClass = singleMsg.user === signedUser.user.id ? 'text-start w-100 mb-3 box-message-sended' : 'text-start w-100 mb-3 box-message-received';
+      const hasContent = singleMsg.metadata.content !== undefined;
+      return (
+        <div className={messageClass}>
+          <h6>{singleMsg.user_data.nomeCompleto}</h6>
+          <p>{singleMsg.metadata.message}</p>
+          {hasContent && <img src={singleMsg.metadata.content} alt="Imagem anexada" className="img-fluid"/>}
+          <p className="text-end fw-bold p-0 m-0 mt-3"><sub>{singleMsg.created_at}</sub></p>
+        </div>
+      );
+    });
+    setChatMessages(finalMsg);
+  }
+
+  useEffect(() => {
+    const resolver = async () => {
+      try{
+        const signedUser = await User.getUser();
+        setUser(signedUser);
+        if (signedUser.user === null) {
+          navigate('/');
+        }
+
+        const userMeta = await User.getMetadata(signedUser.user.id);
+        
+        const isPatient = userMeta.tipoUsuario === 'paciente';
+        setpatientStatus(isPatient);
+
+        const userQuestions = (await HealthCare.getByID(questionID))[0];
+        console.log(userQuestions);
+        setChatOwner(userQuestions.user);
+
+        const initalClass = isPatient ? 'text-start w-100 mb-3 box-message-sended' : 'text-start w-100 mb-3 box-message-received';
+        const especialidade = userQuestions.physician_meta?.meta?.especialidade ?? 'Aguarde';
+        
+        const firstMessage = () => {
+          return(<div className={initalClass}>
+            <h2>Atendimento Solicitado</h2>
+            <ul>
+              <li> <b>Sintomas:</b> </li>
+              <ul>
+                {userQuestions.data.phases[0].sintomas.map(x=><li>{x}</li>)}
+              </ul>
+              <li> <b>Resumo:</b> {userQuestions.data.phases[0].resumo}</li>
+              <li> <b>Alergias:</b> {userQuestions.data.phases[1].alergia}</li>
+              <li> <b>Gravidez:</b> {userQuestions.data.phases[1].gravida?'sim':'não'}</li>
+              <li> <b>Medicamento:</b> {userQuestions.data.phases[1].medicamento}</li>
+              <li> <b>Doenças:</b> </li>
+              <ul>
+                {userQuestions.data.phases[2].doencas.map(x=><li>{x}</li>)}
+              </ul>
+              <li> <b>Realizando Tratamento:</b> {userQuestions.data.phases[2].realizandoTratamento?'sim':'não'}</li>
+              <li> <b>Tratamento:</b> {userQuestions.data.phases[2].descricaoTratamento}</li>
+            </ul>
+            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>{userQuestions.created_at}</sub></p>
+          </div>);
+        }
+        setFirstMessageContent(firstMessage);
+        setQuestions(userQuestions);
+        setDoctorType(especialidade);
+        await loadMessages();
+      } catch (error) {
+        console.log(error);
+      }
+
+    };
+    resolver();
+  }, []);
 
   useEffect(() => {
     if(endOfPageComponent.current) {
@@ -28,13 +136,18 @@ export default function () {
     const file = event.target.files[0]
     const reader = new FileReader()
     reader.readAsDataURL(file)
-    reader.onload = function() {
+    reader.onload = async function() {
       const content = reader.result.toString()
       setFile(content)
       // enviar o arquivo aqui
       setLoading(false)
       event.target.value = ''
       console.log(content)
+
+      await Message.send(user.user.id, questionID, {
+        content,
+      });
+      loadMessages();
     }
   }
 
@@ -48,45 +161,13 @@ export default function () {
   return (
     <>
       <div className="faixa faixa-superior text-center fixed-top">
-        Otorrinolaringologia
+        {doctorType}
       </div>
       <Container className='mt-5' fluid={true}>
         <div className="pt-5 mb-4" />
+        {firstMessageContent}
         <div className="container-mensagens">
-          <div className='text-start w-100 mb-3 box-message-received'>
-            <h6>Ricardo Leandro Maximiliano</h6>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo dolores offici. Dignissimos, magnam est! Aut doloribus debitis nihil ex architecto doloremque libero unde odit animi dolore.</p>
-            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>10/05/2022 10:28</sub></p>
-          </div>
-
-          <div className='text-start w-100 mb-3 box-message-sended'>
-            <h6>Ricardo Leandro Maximiliano</h6>
-            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo dolores offici. Dignissimos, magnam est! Aut doloribus debitis nihil ex architecto doloremque libero unde odit animi dolore.</p>
-            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>10/05/2022 10:28</sub></p>
-          </div>
-
-          <div className='text-start w-100 mb-3 box-message-sended'>
-            <h6>Ricardo Leandro Maximiliano</h6>
-            <p>Dignissimos, magnam est! Aut doloribus debxplicabo dolores offici. Dignissimos, magnam est! Aut doloribus debxplicabo dolores offici. Dignissimos, magnam est! Aut doloribus debxplicabo dolores offici. Dignissimos, magnam est! Aut doloribus debitis nihil ex architecto doloremque libero unde odit animi dolore.</p>
-            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>10/05/2022 10:28</sub></p>
-          </div>
-          <div className='text-start w-100 mb-3 box-message-received'>
-            <h6>Ricardo Leandro Maximiliano</h6>
-            <p>OK.</p>
-            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>10/05/2022 10:28</sub></p>
-          </div>
-          <div className='text-start w-100 mb-3 box-message-received'>
-            <h6>Ricardo Leandro Maximiliano</h6>
-            <a href='https://www.softwaretestingclass.com/wp-content/uploads/2016/06/Beginner-Guide-To-Software-Testing.pdf' target='_blank'>
-              Um arquivo foi compartilhado, clique aqui para realizar o download
-            </a>
-            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>10/05/2022 10:28</sub></p>
-          </div>
-          <div className='text-start w-100 mb-3 box-message-sended'>
-            <h6>Ricardo Leandro Maximiliano</h6>
-            <p> magnam est! Aut doloribus debxplicabo dolores offici. Dignissimos, magnam est! Aut doloribus debxplicabo dolores offici. Dignissimos, magnam est! Aut doloribus debitis nihil ex architecto doloremque libero unde odit animi dolore.</p>
-            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>10/05/2022 10:28</sub></p>
-          </div>
+          {chatMessages}
         </div>
 
         <div ref={endOfPageComponent}/>
@@ -95,18 +176,20 @@ export default function () {
 
       <div className="end-of-page" />
       <div className='fixed-bottom'>
+      <Form onSubmit={handleNewMessage}>
         <div className="caixa-barra-mensagem mb-1">
-          <input type="file" name="file" id="file" style={{display: 'none'}} ref={inputFile} />
-          <Button variant='custom-secondary' onClick={() => {
-            inputFile.current?.click()
-          }}>
-            <BsCardImage size={25} />
-          </Button>
-          <textarea rows={2} className='input-custom-primary p-1 rounded text'  type="text" />
-          <Button variant='custom-secondary'>
-            <AiOutlineSend />
-          </Button>
-        </div>
+            <input type="file" accept="image/png, image/gif, image/jpeg" name="file" id="file" style={{display: 'none'}} ref={inputFile} />
+            <Button variant='custom-secondary' onClick={() => {
+              inputFile.current?.click()
+            }}>
+              <BsCardImage size={25} />
+            </Button>
+            <textarea rows={2} className='input-custom-primary p-1 rounded text' name="message" type="text" />
+            <Button variant='custom-secondary' type="submit">
+              <AiOutlineSend />
+            </Button>
+          </div>
+        </Form>
         <div className='bg-custom-primary text-center footer'>
           <Button variant='custom-primary' onClick={() => navigate('/atendimento')}>
               <BiMessageRoundedAdd size={50}/>

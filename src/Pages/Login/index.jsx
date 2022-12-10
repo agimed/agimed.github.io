@@ -1,5 +1,6 @@
 import { Button, Col, Container, Row, Form, Modal } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { User } from '../../Services/User';
 
 import '../global.css'
 
@@ -47,6 +48,47 @@ export function ModalRecoveryPassword({show, onClose}) {
 
 
 export default function () {
+
+  async function handleLogin(event) {
+    event.preventDefault();
+    const data = new FormData(event.target)
+    const email = data.get('email');
+    const pass = data.get('password');
+
+    const user = new User(email, pass);
+    const auth = await user.login();
+    if (auth === false) {
+      swal({
+        title: 'Dados inválidos',
+        text: `Senha ou e-mail inválidos`,
+        icon: 'warning'
+      })
+    }
+    const userMeta = await User.getUser();
+    if (userMeta.meta === null) {
+      swal({
+        title: 'Registro inválido',
+        text: `Os dados de cadastro estão incompletos`,
+        icon: 'warning'
+      });
+      return;
+    } 
+    const isMedicoPath = window.location.pathname.match(/medico/) !== null;
+    if (isMedicoPath && userMeta.meta.tipoUsuario === "paciente") {
+      swal({
+        title: 'Acesso negado',
+        text: `Você não tem permissão para acessar esta página como médico`,
+        icon: 'warning'
+      });
+      return;
+    }
+    if (userMeta.meta.tipoUsuario === "paciente") {
+      navigate('/atendimento')
+    }else{
+      navigate('/respostas')
+    }
+  }
+
   const navigate = useNavigate()
   const [show, setShow] = useState(false)
 
@@ -76,15 +118,15 @@ export default function () {
       </Row>
 
       <Row>
-        <Form>
+        <Form onSubmit={handleLogin}>
           <Form.Group className="mb-3" controlId="loginEmail">
             <Form.Label className='color-custom-primary'>Email</Form.Label>
-            <Form.Control required className='input-custom-primary ' type="email" />
+            <Form.Control required className='input-custom-primary' name='email' type="email" />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="loginSenha">
             <Form.Label className='color-custom-primary'>Senha</Form.Label>
-            <Form.Control required className="input-custom-primary " type="password" />
+            <Form.Control required className="input-custom-primary" name="password" type="password" />
             <div className="text-end">
               <a className='link-custom-primary' href="#" onClick={(e) => {
                 e.preventDefault()
@@ -100,7 +142,7 @@ export default function () {
             </Col>
 
             <Col className='text-start'>
-              <Button variant='custom-primary' className='w-75' onClick={() => navigate('/atendimento')}>
+              <Button variant='custom-primary' className='w-75' type='submit'>
                 Entrar
               </Button>
             </Col>

@@ -1,13 +1,43 @@
 import { Button, Col, Container, Row } from "react-bootstrap"
 import { Link, useNavigate } from "react-router-dom"
 import { BiMessageRoundedAdd, BiMessageAltError, BiUser } from 'react-icons/bi'
+import { User } from '../../Services/User';
+import { HealthCare } from "../../Services/HealthCare";
 
 import arrowLeftImg from '../../assets/arrow-left.svg'
+import { useAtendimentoContext } from "../../Providers/Atendimento";
+import { useEffect } from "react";
 
 import '../global.css'
 
 export default function () {
   const navigate = useNavigate()
+  const [stateAtendimento, dispatchAtendimento] = useAtendimentoContext();
+
+  useEffect(() => {
+    const resolver = async () => {
+      try{
+        if(!stateAtendimento.phases[3]) {
+          dispatchAtendimento({ type: 'reset' });
+          navigate('/atendimento')
+          return;
+        }
+
+        const signedUser = await User.getUser();
+        if (signedUser.user === null) {
+          navigate('/');
+        }
+
+        await HealthCare.create(signedUser.user.id, stateAtendimento);
+        // dispatchAtendimento({ type: 'reset' });
+
+      } catch (error) {
+        console.log(error);
+      }
+      
+    };
+    resolver();
+  }, []);
 
   return (
     <>
