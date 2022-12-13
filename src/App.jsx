@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
   Route,
@@ -18,8 +18,15 @@ import CadastroUsuario from './Pages/CadastroUsuario';
 import Perfil from './Pages/Perfil';
 import Respostas from './Pages/Respostas';
 import Mensagens from './Pages/Mensagens';
-import { TermoDePrivacidade } from './Pages/TermoDePrivacidade';
 
+
+function Redirect({ to='/' }) {
+  const navigate = useNavigate();
+  useEffect(() => {
+    navigate(to);
+  }, [])
+  return <div />
+}
 
 function App() {
   return (
@@ -35,6 +42,10 @@ function App() {
       <Route path='/perfil' element={<Perfil />} />
       <Route path='/respostas' element={<Respostas />} />
       <Route path='/respostas/:id/' element={<Mensagens />} />
+
+      {/* ERRO 404 */}
+      <Route path='*' element={<Redirect to='/' />} />
+
     </Routes>
   )
 }
