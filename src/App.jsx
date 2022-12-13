@@ -18,16 +18,8 @@ import CadastroUsuario from './Pages/CadastroUsuario';
 import Perfil from './Pages/Perfil';
 import Respostas from './Pages/Respostas';
 import Mensagens from './Pages/Mensagens';
+import { TermoDePrivacidade } from './Pages/TermoDePrivacidade';
 
-
-function P1() {
-  const navigate = useNavigate()
-  return (
-    <div onClick={() => { navigate('/about') }}>
-      Cole mano 1
-    </div>
-  )
-}
 
 function App() {
   return (
@@ -43,8 +35,6 @@ function App() {
       <Route path='/perfil' element={<Perfil />} />
       <Route path='/respostas' element={<Respostas />} />
       <Route path='/respostas/:id/' element={<Mensagens />} />
-      <Route path='/' element={<P1 />} />
-      <Route path='/about' element={<div>Cole mano 2</div>}/>
     </Routes>
   )
 }
