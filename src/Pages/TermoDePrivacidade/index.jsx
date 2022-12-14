@@ -80,7 +80,7 @@ export function TermoDePrivacidade({ onAccept }) {
 
             <div className='text-center'>
                 <Button variant="custom-secondary" className="text-dark" onClick={onAccept}>
-                    <b>Voltar ao site</b>
+                    <b>Acessar site</b>
                 </Button>
             </div>
         </Container>

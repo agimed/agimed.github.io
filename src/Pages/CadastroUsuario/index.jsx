@@ -68,8 +68,12 @@ export default function () {
       return
     }
 
+    formik.setFieldValue('endereco', '')
     const onlyNumbers = cep.replace(/\D/g, '')
     formik.setFieldValue('cep', onlyNumbers)
+    if(onlyNumbers.length === 8) {
+      handleSearchCep()
+    }
   }, [formik.values.cep])
 
 
@@ -209,7 +213,7 @@ export default function () {
             <Col sm={12} md={3}>
               <Form.Group className="mb-3" controlId="cadastroCEP">
                 <Form.Label className='color-custom-primary'>CEP</Form.Label>
-                <Form.Control onBlur={handleSearchCep} required className='input-custom-primary' type="text" onChange={formik.handleChange} value={formik.values.cep} name='cep' />
+                <Form.Control required className='input-custom-primary' type="text" onChange={formik.handleChange} value={formik.values.cep} name='cep' />
               </Form.Group>
             </Col>
             <Col></Col>
@@ -243,6 +247,7 @@ export default function () {
           </Form.Group>
           <Row className={formik.values.senha !== formik.values.confirmacaoSenha ? 'border border-danger rounded p-3' : ''}>
             {formik.values.senha !== formik.values.confirmacaoSenha ? <span className='text-danger'>Senhas não são iguais</span>: null}
+            {formik.values.senha.length < 6 ? <span className='text-danger'>A senha precisa ter no mínimo 6 caracteres</span>: null}
             <Col sm={12} md={6}>
               <Form.Group className="mb-3" controlId="cadastroSenha">
                 <Form.Label className='color-custom-primary'>Senha</Form.Label>

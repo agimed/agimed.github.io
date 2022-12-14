@@ -17,8 +17,8 @@ export function ModalRecoveryPassword({show, onClose}) {
 
     swal({
       title: 'Recuperação de senha',
-      text: `Se existir alguma conta vinculada ao email ${email}, enviaremos o link para redefinir sua senha`,
-      icon: 'success'
+      text: `Funcionalidade não disponível no momento, entre em contato com o suporte`,
+      icon: 'warning',
     })
 
     onClose()

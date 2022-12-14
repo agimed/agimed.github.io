@@ -15,6 +15,8 @@ import '../global.css'
 import { useState, useRef } from "react";
 import { useEffect } from "react";
 
+import {formatarDataHora} from '../../Utils/formatarDataHora'
+
 export default function () {
   const navigate = useNavigate()
   const endOfPageComponent = useRef(null)
@@ -36,8 +38,7 @@ export default function () {
     event.preventDefault();
     const data = new FormData(event.target)
     const message = data.get('message');
-
-    console.log();
+    event.target.reset();
 
     await Message.send(user.user.id, questionID, {
       message,
@@ -50,6 +51,7 @@ export default function () {
   }
 
   async function loadMessages() {
+    setLoading(true)
     // patientStatus
     const signedUser = await User.getUser();
 
@@ -63,11 +65,12 @@ export default function () {
           <h6>{singleMsg.user_data.nomeCompleto}</h6>
           <p>{singleMsg.metadata.message}</p>
           {hasContent && <img src={singleMsg.metadata.content} alt="Imagem anexada" className="img-fluid"/>}
-          <p className="text-end fw-bold p-0 m-0 mt-3"><sub>{singleMsg.created_at}</sub></p>
+          <p className="text-end fw-bold p-0 m-0 mt-3"><sub>{formatarDataHora(singleMsg.created_at)}</sub></p>
         </div>
       );
     });
     setChatMessages(finalMsg);
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -110,7 +113,7 @@ export default function () {
               <li> <b>Realizando Tratamento:</b> {userQuestions.data.phases[2].realizandoTratamento?'sim':'não'}</li>
               <li> <b>Tratamento:</b> {userQuestions.data.phases[2].descricaoTratamento}</li>
             </ul>
-            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>{userQuestions.created_at}</sub></p>
+            <p className="text-end fw-bold p-0 m-0 mt-3"><sub>{formatarDataHora(userQuestions.created_at)}</sub></p>
           </div>);
         }
         setFirstMessageContent(firstMessage);
@@ -140,14 +143,14 @@ export default function () {
       const content = reader.result.toString()
       setFile(content)
       // enviar o arquivo aqui
-      setLoading(false)
       event.target.value = ''
       console.log(content)
-
+      
       await Message.send(user.user.id, questionID, {
         content,
       });
       loadMessages();
+      setLoading(false)
     }
   }
 

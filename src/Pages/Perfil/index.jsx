@@ -6,8 +6,10 @@ import { useEffect } from "react";
 
 import '../global.css'
 import { useState } from "react";
+import { useLoadingContext } from "../../Providers/Loading";
 
 export default function () {
+  
   const [userData, setUserData] = useState({
     "user": {
         "email": "rrenatosilva.rs@gmail.com",
@@ -27,9 +29,11 @@ export default function () {
     }
 });
   const navigate = useNavigate();
+  const [,setLoading] = useLoadingContext()
 
   useEffect(() => {
     const resolver = async () => {
+      setLoading(true)
       try{
         const signedUser = await User.getUser();
         if (signedUser.user === null) {
@@ -40,6 +44,7 @@ export default function () {
       } catch (error) {
         console.log(error);
       }
+      setLoading(false)
     };
     resolver();
   }, []);

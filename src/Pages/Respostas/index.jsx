@@ -8,14 +8,19 @@ import { HealthCare } from "../../Services/HealthCare";
 import '../global.css'
 import { useState } from "react";
 import { useEffect } from "react";
+import {formatarDataHora} from '../../Utils/formatarDataHora'
+import { useLoadingContext } from "../../Providers/Loading";
 
 export default function () {
   const navigate = useNavigate()
   const [questions, setQuestions] = useState([]);
   const [patientStatus, setpatientStatus] = useState(true);
+  const [,setLoading] = useLoadingContext()
+
 
   useEffect(() => {
     const resolver = async () => {
+      setLoading(true)
       try{
         const signedUser = await User.getUser();
         if (signedUser.user === null) {
@@ -40,6 +45,7 @@ export default function () {
       } catch (error) {
         console.log(error);
       }
+      setLoading(false)
 
     };
     resolver();
@@ -55,7 +61,7 @@ export default function () {
             return (<Button variant='custom-primary text-start w-100 mb-3' onClick={() => navigate(`/respostas/${question.id}`)}>
             <h3>{nome}</h3>
             <h5>{especialidade}</h5>
-            <p className="text-end fw-bold p-0 m-0 mt-3">Criado em {question.created_at}</p>
+            <p className="text-end fw-bold p-0 m-0 mt-3">Criado em {formatarDataHora(question.created_at)}</p>
           </Button>);
           })
         }</Form>
