@@ -10,7 +10,7 @@ export function TermoDePrivacidade({ onAccept }) {
         <Container className="main">
             <h1 className='text-center'>Política de Privacidade</h1>
             <p>
-                <span>A sua privacidade é importante para nós. É política do Agimed respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no site <a className="text-decoration-none" href="https://agimed.github.io">Agimed <img src="https://projetopuc.blob.core.windows.net/agimed/icone.png" alt="icone" /></a>, e outros sites que possuímos e operamos.</span>
+                <span>A sua privacidade é importante para nós. É política do Agimed respeitar a sua privacidade em relação a qualquer informação sua que possamos coletar no site <a className="text-decoration-none" href="https://agimed.github.io">Agimed <img className="ico-page" src={linkImg} alt="icone" /></a>, e outros sites que possuímos e operamos.</span>
             </p>
                 <p>
                     <span>Solicitamos informações pessoais apenas quando realmente precisamos delas para lhe fornecer um serviço. Fazemo-lo por meios justos e legais, com o seu conhecimento e consentimento. Também informamos por que estamos coletando e como será usado.</span>
