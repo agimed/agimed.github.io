@@ -9,6 +9,15 @@ import { useState } from "react";
 import { useLoadingContext } from "../../Providers/Loading";
 
 export default function () {
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    const termo = localStorage.getItem('@termo-de-privacidade')
+    localStorage.clear()
+    localStorage.setItem('@termo-de-privacidade', termo)
+    navigate('/')
+  }
+
   
   const [userData, setUserData] = useState({
     "user": {
@@ -27,8 +36,7 @@ export default function () {
         "crm": "",
         "especialidade": ""
     }
-});
-  const navigate = useNavigate();
+  });
   const [,setLoading] = useLoadingContext()
 
   useEffect(() => {
@@ -85,7 +93,11 @@ export default function () {
               
           </div>
         </Form>
+        <Button variant="outline-danger" onClick={handleLogout}>
+          Clique aqui para sair da sua conta
+        </Button>
       </Container>
+
 
       <div className="end-of-page" />
       <div className='bg-custom-primary text-center fixed-bottom footer'>
